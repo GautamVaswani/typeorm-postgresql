@@ -1,19 +1,26 @@
 import * as express from "express";
 import { AppDataSource } from "./data-source";
-import { createClientRouter } from "./routes/create_clients";
+import { createClientRouter } from "./routes/clients-routes";
+import { createBankerRouter } from "./routes/banker-routes";
+import { createTransactionRouter } from "./routes/transaction-routes";
+import { connectBankerToClientRouter } from "./routes/connect-banker-to-client-routes";
 
 const app = express();
+app.use(express.json());
+app.use(createClientRouter);
+app.use(createBankerRouter);
+app.use(createTransactionRouter);
+app.use(connectBankerToClientRouter);
 
 const port = 3000;
 
 const main = async () => {
   AppDataSource.initialize()
     .then(async () => {
-      console.log("Connected to PostgreSQL database");
-      app.use(express.json());
-      app.use(createClientRouter);
       app.listen(port, () => {
-        console.log(`Application is running on port ${port}.`);
+        console.log(
+          `Connected to PostgreSQL database. Application is running on port ${port}.`
+        );
       });
 
       // Insert new user

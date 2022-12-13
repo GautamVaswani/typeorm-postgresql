@@ -25,7 +25,9 @@ export class Banker extends User {
   @UpdateDateColumn()
   last_updated: Date;
 
-  @ManyToMany(() => Client)
+  @ManyToMany(() => Client, {
+    cascade: true,
+  })
   @JoinTable({
     name: "bankers_clients",
     joinColumn: { name: "banker", referencedColumnName: "id" },
